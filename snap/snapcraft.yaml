@@ -19,8 +19,8 @@ parts:
       - blueprint-compiler
     override-build: |
       craftctl default
-      pip install --target=$CRAFT_PART_PRIME/usr/lib/python3/dist-packages matplotlib
-      pip install --target=$CRAFT_PART_PRIME/usr/lib/python3/dist-packages scipy
+      pip install --target=$CRAFT_PART_INSTALL/usr/lib/python3/dist-packages matplotlib
+      pip install --target=$CRAFT_PART_INSTALL/usr/lib/python3/dist-packages scipy
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/usr/bin/graphs"
     parse-info: [usr/share/appdata/se.sjoerd.Graphs.appdata.xml]
     
