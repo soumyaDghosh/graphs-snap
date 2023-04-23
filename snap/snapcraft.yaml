@@ -24,7 +24,7 @@ parts:
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/graphs/current/usr/bin/graphs"
     organize:
       /snap/graphs/current/usr: usr
-    parse-info: [usr/share/appdata/se.sjoerd.Graphs.appdata.xml]
+    parse-info: [snap/graphs/current/usr/share/appdata/se.sjoerd.Graphs.appdata.xml]
     
 apps:
   graphs:
