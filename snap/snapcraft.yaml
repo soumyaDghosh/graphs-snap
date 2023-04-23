@@ -26,7 +26,7 @@ parts:
     
 apps:
   graphs:
-    command: usr/bin/se.sjoerd.Graphs
+    command: usr/bin/graphs
     desktop: usr/share/applications/se.sjoerd.Graphs.desktop
     common-id: se.sjoerd.Graphs
     environment:
