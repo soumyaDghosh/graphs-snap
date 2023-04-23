@@ -14,7 +14,7 @@ parts:
     source: https://github.com/Sjoerd1993/Graphs.git
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
     meson-parameters:
-      - prefix=/usr
+      - --prefix=/usr
     build-packages:
       - blueprint-compiler
     override-build: |
