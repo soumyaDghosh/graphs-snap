@@ -7,6 +7,10 @@ grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 compression: lzo
 license: GPL-3.0
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+  - build-on: armhf
 slots:
   graphs:
     interface: dbus
@@ -21,6 +25,7 @@ parts:
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
     meson-parameters:
       - --prefix=/snap/graphs/current/usr
+      - --buildtype=release
     build-packages:
       - blueprint-compiler
     override-build: |
