@@ -1,7 +1,5 @@
 name: graphs # you probably want to 'snapcraft register <name>'
 base: core22 # the base snap is the execution environment for this snap
-version: '1.5.2' # just for humans, typically '1.2+git' or '1.3.2'
-icon: se.sjoerd.Graphs.svg
 adopt-info: graphs
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
@@ -11,17 +9,17 @@ architectures:
   - build-on: amd64
   - build-on: arm64
 slots:
+#For GtkApplication registration
   graphs:
     interface: dbus
     bus: session
     name: se.sjoerd.Graphs
 parts:
-#For GtkApplication registration
   graphs:
     # See 'snapcraft plugins'
     plugin: meson
     source: https://github.com/Sjoerd1993/Graphs.git
-    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    source-tag: 'v1.5.2'
     meson-parameters:
       - --prefix=/snap/graphs/current/usr
       - --buildtype=release
@@ -29,8 +27,8 @@ parts:
       - blueprint-compiler
     override-build: |
       craftctl default
-      pip install --target=$CRAFT_PART_INSTALL/snap/graphs/current/usr/lib/python3/dist-packages matplotlib
-      pip install --target=$CRAFT_PART_INSTALL/snap/graphs/current/usr/lib/python3/dist-packages scipy
+      pip install --target=$CRAFT_PART_INSTALL/snap/graphs/current/usr/lib/python3/dist-packages matplotlib==3.7.1
+      pip install --target=$CRAFT_PART_INSTALL/snap/graphs/current/usr/lib/python3/dist-packages scipy==1.10.1
       sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/graphs/current/usr/bin/graphs"
     organize:
       snap/graphs/current/usr: usr
@@ -39,7 +37,6 @@ parts:
 apps:
   graphs:
     command: usr/bin/graphs
-    desktop: usr/share/applications/se.sjoerd.Graphs.desktop
     common-id: se.sjoerd.Graphs
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$SNAP/usr/share/graphs:$PYTHONPATH
