@@ -1,6 +1,7 @@
 name: graphs # you probably want to 'snapcraft register <name>'
 base: core22 # the base snap is the execution environment for this snap
 adopt-info: graphs
+version: git
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 compression: lzo
@@ -19,7 +20,7 @@ parts:
     # See 'snapcraft plugins'
     plugin: meson
     source: https://github.com/Sjoerd1993/Graphs.git
-    source-tag: 'v1.5.2'
+    #source-tag: 'v1.5.2'
     meson-parameters:
       - --prefix=/snap/graphs/current/usr
       - --buildtype=release
