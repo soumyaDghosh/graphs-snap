@@ -41,6 +41,9 @@ parts:
       for i in `find $CRAFT_PART_INSTALL/meta/gui/icons -name "*.svg" -o -name "*.png"`; do
         mv $i "`dirname $i`/snap.$CRAFT_PROJECT_NAME.`basename $i`"
       done
+    override-prime: | 
+      craftctl default
+      rm -rf $CRAFT_PART_INSTALL/usr/lib/python3.10/bin
     organize:
       snap/graphs/current/usr: usr
       usr/local: usr
@@ -49,7 +52,7 @@ parts:
     prime:
       - meta/*
       - usr/bin/graphs
-      - -usr/lib/python3.10/bin
+      - usr/lib/python3.10/
       - usr/share/app*
       - usr/share/i*
       - usr/share/l*
