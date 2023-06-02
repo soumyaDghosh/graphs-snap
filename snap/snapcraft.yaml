@@ -1,7 +1,6 @@
 name: graphs # you probably want to 'snapcraft register <name>'
 base: core22 # the base snap is the execution environment for this snap
 adopt-info: graphs
-version: git
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 compression: lzo
@@ -9,12 +8,14 @@ license: GPL-3.0
 architectures:
   - build-on: amd64
   - build-on: arm64
+  - build-on: armhf
+
 slots:
-#For GtkApplication registration
   graphs:
     interface: dbus
     bus: session
     name: se.sjoerd.Graphs
+
 parts:
   graphs:
     # See 'snapcraft plugins'
@@ -26,19 +27,30 @@ parts:
       - --buildtype=release
     build-packages:
       - blueprint-compiler
+    override-pull: |
+      craftctl default
+      patch -p1 < $CRAFT_PROJECT_DIR/graphs.patch
     override-build: |
       craftctl default
-      pip install --target=$CRAFT_PART_INSTALL/snap/graphs/current/usr/lib/python3/dist-packages matplotlib==3.7.1
-      pip install --target=$CRAFT_PART_INSTALL/snap/graphs/current/usr/lib/python3/dist-packages scipy==1.10.1
-      sed -e '1c#!/usr/bin/env python3' -i "${CRAFT_PART_INSTALL}/snap/graphs/current/usr/bin/graphs"
+      pip install --prefix=$CRAFT_PART_INSTALL/usr matplotlib==3.7.1
+      pip install --target=$CRAFT_PART_INSTALL/usr scipy==1.10.1
+      sed -e '1c#!/usr/bin/env python3' -i ${CRAFT_PART_INSTALL}/snap/graphs/current/usr/bin/graphs
+      sed -e '1c#!/usr/bin/python3' -i $CRAFT_PART_INSTALL/usr/local/bin/*
+      mkdir -p $CRAFT_PART_INSTALL/meta/gui
+      cp -r $CRAFT_PART_INSTALL/snap/dialect/current/usr/share/icons $CRAFT_PART_INSTALL/meta/gui/
+      for i in `find $CRAFT_PART_INSTALL/meta/gui/icons -name "*.svg" -o -name "*.png"`; do
+        mv $i "`dirname $i`/snap.$CRAFT_PROJECT_NAME.`basename $i`"
+      done
     organize:
       snap/graphs/current/usr: usr
+      usr/local: usr
     parse-info: [usr/share/appdata/se.sjoerd.Graphs.appdata.xml]
     
 apps:
   graphs:
     command: usr/bin/graphs
+    desktop: usr/share/applications/se.sjoerd.Graphs.desktop
     common-id: se.sjoerd.Graphs
     environment:
-      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$SNAP/usr/share/graphs:$PYTHONPATH
+      PYTHONPATH: $SNAP/usr/lib/python3.10/dist-packages:$PYTHONPATH
     extensions: [gnome]
